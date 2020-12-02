@@ -79,8 +79,35 @@ async def on_message(message):
             await message.channel.send(":white_check_mark: 네, 성공적으로 더했어요!")
             with open('wordlist.txt', 'wb') as f:
                 pickle.dump(word_list, f)
+    if messageContent.startswith("경고 1 ") == True:
+        if message.author.guild_permissions.administrator or message.author.id == 770025636148150302:
+            try:
+                yoyid = int(messageContent[5:])
+            except ValueError:
+                await message.channel.send(":no_entry: 경고할 사용자의 id를 입력해주세요.")
+            
+            await message.channel.send(":white_check_mark: 네, 성공적으로 더했어요!")
+            with open('warnid.txt', 'rb') as f:
+                warnidlist = pickle.load(f)
+            with open('warnnum.txt', 'rb') as f:
+                warnnumlist = pickle.load(f)
+            if yoyid in warnidlist:
+                yoyin = warnidlist.index(yoyid)
+                warnnumlist[yoyid] = warnnumlist[yoyid]+1
+                if warnnumlist[yoyid] == 3:
+                    await app.kick(yoyid)
+                else:
+                    await message.channel.send(str(yoyid)+"의 경고 개수는 "+str(warnnumlist[yoyid])+"개에요! 3개가 쌓이면 킥되요!")
+            else:
+                warnidlist.append(yoyid)
+                warnnumlist.append(1)
+                await message.channel.send(str(yoyid)+"의 경고 개수는 1개에요! 3개가 쌓이면 킥되요!")
+            with open('warnnum.txt', 'wb') as f:
+                pickle.dump(warnnumlist, f)
+            with open('warnid.txt', 'wb') as f:
+                pickle.dump(warnidlist, f)
         else:
-            embed = discord.Embed(title = ":no_entry: 욕설리스트 관리 불가", description = message.author.mention + "님, 권한이 없어요!", colour=0xff0000)
+            embed = discord.Embed(title = ":no_entry: 경고 관리 불가", description = message.author.mention + "님, 권한이 없어요!", colour=0xff0000)
             await message.channel.send(embed=embed)
     if messageContent == "욕설리스트":
         await message.channel.send("||"+str(word_list)+"||")
@@ -203,6 +230,94 @@ async def on_message(message):
                     await message.channel.send("`"+ne+"`에 대해 설명해주세요!")
                 elif olo == 6:
                     await message.channel.send("`"+ne+"`? 아마 `상자 배워 "+ne+" (답할 내용)`으로 저에게 알려주세요!")
+    if message.content == "yee":
+        await message.channel.send("<:yee:782831678749933568>")
+    if messageContent == ":/":
+        await message.channel.send("<:__:782833337013764147>")
+    if messageContent in "네. 흠":
+        await message.channel.send("<:sp:782831196877881374>")
+    if messageContent.startswith("크기비교 ") == True:
+        splitlist = messageContent.split(" ")
+        a = splitlist[1]
+        b = splitlist[2]
+        if a.isdigit() == True:
+            if b.isdigit() == True:
+                if a.isdecimal() == True:
+                    if b.isdecimal() == True:
+                        a = int(a)
+                        b = int(b)
+                        if a > b:
+                            big = a
+                            small = b
+                            same = 0
+                        elif a == b:
+                            same = 1
+                        else:
+                            small = a
+                            big = b
+                            same = 0
+                    else:
+                        b = float(str(b)+".0")
+                        a = float(a)
+                        if a > b:
+                            big = a
+                            small = b
+                            same = 0
+                        elif a == b:
+                            same = 1
+                        else:
+                            small = a
+                            big = b
+                            same = 0
+                else:
+                    if b.isdemical() == True:
+                        a = float(str(a)+'.0')
+                        b = int(b)
+                        if a > b:
+                            big = a
+                            small = b
+                            same = 0
+                        elif a == b:
+                            same = 1
+                        else:
+                            small = a
+                            big = b
+                            same = 0
+                    else:
+                        b = float(str(b)+".0")
+                        a = float(str(a)+".0")
+                        if a > b:
+                            big = a
+                            small = b
+                            same = 0
+                        elif a == b:
+                            same = 1
+                        else:
+                            small = a
+                            big = b
+                            same = 0
+                await message.channel.send(str(big)+"이 "+str(small)+"보다 큽니다.")
+            else:
+                await message.channel.send(message.author.mention + ", 두 argument가 모두 정수여야 해요.")
+        else:
+            await message.channel.send(message.author.mention + ", 두 argument가 모두 정수여야 해요.")
+    if messageContent == "gooddy":
+        await message.channel.send("https://cdn.discordapp.com/emojis/782882869315895336.gif?v=1")
+    if messageContent == "흠터":
+        await message.add_reaction("<a:angrythonkspin:782882249515073546>")
+    if messageContent == "멘션그만":
+        await message.add_reaction("<a:angrywithmention:782882327613145088>")
+    if messageContent == "삐에로":
+        await message.channel.send("<a:pierrofuk:782882999112171531>")
+    if messageContent == "댄싱체어":
+        await message.channel.send("<a:dancingchair:782882516855029832>")
+    if messageContent == "로봇피그":
+        await message.channel.send("<a:robotpigspin:782883049292431391>")
+    if messageContent == "생각퍼짐":
+        await message.channel.send("<a:awwpurge:782882293827239936>")
+    if messageContent == "점프블롭":
+        await message.channel.send("<a:blobokfuk:782882386911821826>")
+    
 
 keep_alive()
-app.run('NzgxNjU1MzA5MzM2MDUxNzIy.X8AzPA.gRxnxjBMYrEsvXbIBdHXgraw9Kg')
+app.run('your token')
